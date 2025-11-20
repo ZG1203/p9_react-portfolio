@@ -4,10 +4,9 @@ import Header from './Header';
 
 const pages = [
   { name: 'Home', key: 'home' },
-  { name: 'Project', key: 'project' },
 ]
 
-const Layout = ({ children, selectedPage, onSetPage }) => {
+const Layout = ({ children, selectedPage, onSetPage, repos=[] }) => {
 
   const renderPageLinks = () => {
 
@@ -23,8 +22,19 @@ const Layout = ({ children, selectedPage, onSetPage }) => {
           {page.name}
         </li>
     ));
-  }
+  }; 
 
+  const renderRepoLinks = () => {
+    if (!repos || repos.length === 0) {
+      return <li>No projects available</li>;
+    }
+
+    return repos.map(repo => (
+      <li key={repo.id} style={styles.repoItem} >
+        <div>{repo.name}</div>
+      </li>
+    ));
+  };
 
   return (
     <div style={styles.container}>
@@ -37,6 +47,12 @@ const Layout = ({ children, selectedPage, onSetPage }) => {
           <ul>
            {renderPageLinks()}
           </ul>
+          <div style={styles.repoSection}>
+            <h4 style={styles.repoTitle}>Projects List</h4>
+            <ul style={styles.repoList}>
+              {renderRepoLinks()}
+            </ul>
+          </div>
         </aside>
 
         {/* Content Area */}
@@ -87,6 +103,15 @@ const styles = {
     padding: '5px',
     color: '#333',
     textDecoration: 'none',
+  },
+  repoItem: {
+    padding: '8px 10px',
+    marginBottom: '5px',
+    backgroundColor: '#fff',
+    border: '1px solid #e0e0e0',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
   },
 };
 
