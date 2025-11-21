@@ -14,7 +14,11 @@ function App() {
   const fetchRepos = async () => {
     try {
         const response = await axios.get(`https://api.github.com/users/${user}/repos`);
-        setRepos(response.data);
+        const filteredRepos = response.data.filter(repo => {
+          const name = repo.name.toLowerCase();
+          return name.length >= 2 && name[0] === 'p' && !isNaN(parseInt(name[1]));
+        });
+        setRepos(filteredRepos);
         console.log(response.data);
       } catch (error) {
         console.error('Error:', error);
