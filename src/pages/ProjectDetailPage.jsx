@@ -1,7 +1,6 @@
-// ProjectDetailPage.js
 import React from 'react';
 
-const ProjectDetailPage = () => {
+const ProjectDetailPage = ({ repo }) => {
   return (
     <div>
       <h2>Welcome to the Project Detail Page</h2>

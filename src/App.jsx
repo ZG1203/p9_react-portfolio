@@ -8,6 +8,7 @@ function App() {
 
   const [page, setPage] = useState('home');
   const [repos, setRepos] = useState([]);
+  const [selectedRepo, setSelectedRepo] = useState(null);
   const user = "ZG1203"
   
   useEffect(() => {
@@ -16,9 +17,9 @@ function App() {
         const response = await axios.get(`https://api.github.com/users/${user}/repos`);
         const filteredRepos = response.data.filter(repo => {
           const name = repo.name.toLowerCase();
-          return name.length >= 2 && name[0] === 'p' && !isNaN(parseInt(name[1]));
+          return name.length >= 2 && name[0] === 'p' && !isNaN(parseInt(name[1])); 
         });
-        setRepos(filteredRepos);
+        setRepos(filteredRepos); //get list of repos with name begin with p followed a number - all resps for bootcamp assignment
         console.log(response.data);
       } catch (error) {
         console.error('Error:', error);
@@ -27,10 +28,24 @@ function App() {
     fetchRepos();
   }, []);
 
-  return (
-    <Layout selectedPage={page} onSetPage={setPage} repos={repos}>
+  const RepoClick = (repo) => {
+    setSelectedRepo(repo);
+    setPage('repo-detail');
+  };
 
-      {page === 'home' && <HomePage />}
+  // when select home, set selected repo to null
+  const handleSetPage = (newPage) => {
+    setPage(newPage);
+    if (newPage === 'home') {
+      setSelectedRepo(null); 
+    }
+  };
+
+  return (
+    <Layout selectedPage={page} onSetPage={handleSetPage} repos={repos} onRepoClick={RepoClick} selectedRepo={selectedRepo}>
+
+      {page === 'home' && <HomePage onRepoClick={RepoClick} />}
+      {page === 'repo-detail' && selectedRepo && (<ProjectDetailPage repo={selectedRepo} />)}
 
     </Layout>
   );

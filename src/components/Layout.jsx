@@ -6,7 +6,7 @@ const pages = [
   { name: 'Home', key: 'home' },
 ]
 
-const Layout = ({ children, selectedPage, onSetPage, repos=[] }) => {
+const Layout = ({ children, selectedPage, onSetPage, repos=[], onRepoClick, selectedRepo }) => {
 
   const renderPageLinks = () => {
 
@@ -30,7 +30,14 @@ const Layout = ({ children, selectedPage, onSetPage, repos=[] }) => {
     }
 
     return repos.map(repo => (
-      <li key={repo.id} style={styles.repoItem} >
+      <li 
+        key={repo.id} 
+        style={{
+          ...styles.repoItem,
+          ...(selectedRepo && selectedRepo.id === repo.id ? styles.repoItemSelected : {}),
+        }}
+          onClick={()=> onRepoClick(repo)}
+      >
         <div>{repo.name}</div>
       </li>
     ));
@@ -44,7 +51,7 @@ const Layout = ({ children, selectedPage, onSetPage, repos=[] }) => {
       <div style={styles.main}>
         {/* Sidebar */}
         <aside style={styles.sidebar}>
-          <ul>
+          <ul style={styles.sidebarList}>
            {renderPageLinks()}
           </ul>
           <div style={styles.repoSection}>
@@ -86,7 +93,7 @@ const styles = {
   sidebar: {
     width: '200px',
     backgroundColor: '#f4f4f4',
-    padding: '5px',
+    padding: '5px 0px',
   },
   content: {
     flex: 1,
@@ -98,20 +105,47 @@ const styles = {
     textAlign: 'center',
     padding: '10px',
   },
+  sidebarList: {
+    listStyle: 'none',
+    padding: '0 15px',
+    margin: 0,
+  },
   sidebarLink: {
     display: 'block',
-    padding: '5px',
     color: '#333',
     textDecoration: 'none',
+    padding: '8px 10px',
+    fontSize: '14px',
+    borderRadius: '4px',
+    fontWeight: 'bold',
+  },
+  repoSection: {
+    marginTop: '20px',
+    padding: '0 15px', 
+  },
+  repoTitle: {
+    margin: '0 0 10px 0',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'left',
   },
   repoItem: {
-    padding: '8px 10px',
+    padding: '5px 5px',
     marginBottom: '5px',
     backgroundColor: '#fff',
     border: '1px solid #e0e0e0',
     borderRadius: '4px',
     cursor: 'pointer',
     transition: 'background-color 0.2s',
+    wordBreak: 'break-word',
+  },
+  repoList: {
+    listStyleType: 'none',
+    padding: 0,
+  },
+  repoItemSelected: {
+    backgroundColor: '#999',
   },
 };
 
